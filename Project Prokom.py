@@ -38,9 +38,12 @@ def add_task():
     # Sleep until the reminder time
     time.sleep(time_difference_seconds)
     
-    # Display the reminder
-    print("\nREMINDER:")
-    print(reminder_text)
+    notification.notify(
+        title="Reminder",
+        message=reminder_text,
+        timeout=10  # Notification display time (in seconds)
+    )
+
 
 
 def view_tasks():
