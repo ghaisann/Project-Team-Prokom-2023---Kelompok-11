@@ -85,7 +85,7 @@ def main():
 
         print()
 
-#menjalankan program
+#menjalankan progr
 if __name__ == "__main__":
     main()
 
