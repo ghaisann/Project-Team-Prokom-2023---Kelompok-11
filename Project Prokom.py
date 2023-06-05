@@ -82,7 +82,7 @@ def main():
 
         print()
 
-#menjalankan program
+#menjalankan progra
 if __name__ == "__main__":
     main()
 
