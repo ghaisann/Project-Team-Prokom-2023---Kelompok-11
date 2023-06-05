@@ -82,7 +82,7 @@ def main():
 
         print()
 
-# Memproses program 
+
 if __name__ == "__main__":
     main()
 
