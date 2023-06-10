@@ -93,17 +93,12 @@ def notify_task_reminder(description, status, hours, minutes):
 
 def mark_task_as_completed():
     view_tasks_and_reminders()
-    while True:
-        try:
-            task_number = int(input("Enter the task number to mark as completed: "))
-            if 1 <= task_number <= len(tasks):
-                tasks[task_number - 1]["completed"] = True
-                print("Task marked as completed!")
-                break
-            else:
-                print("Invalid task number.")
-        except ValueError:
-            print("Invalid input. Please enter a valid task number.")
+    task_number = int(input("Enter the task number to mark as completed: "))
+    if 1 <= task_number <= len(tasks):
+        tasks[task_number - 1]["completed"] = True
+        print("Task marked as completed!")
+    else:
+        print("Invalid task number.")
 
 def main():
     load_tasks_from_csv()
