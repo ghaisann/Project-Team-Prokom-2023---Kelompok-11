@@ -1,7 +1,7 @@
 import csv
 import datetime
 import time
-
+from plyer import notification
 tasks = []
 
 def display_menu():
@@ -62,13 +62,21 @@ def view_tasks_and_reminders():
                 remaining_time = time_difference.total_seconds()
                 if remaining_time <= 0:
                     print(f"{index}. {task['description']} - {status} (Reminder time passed)")
+                    # Munculkan notifikasi
+                    notification.notify(
+                        title="Task Reminder",
+                        message=f"{task['description']} - {status}",
+                        timeout=10  # Durasi notifikasi dalam detik
+                    )
                 else:
+                    remaining_hours = int(remaining_time / 3600)
                     remaining_minutes = int(remaining_time / 60)
-                    print(f"{index}. {task['description']} - {status} (Reminder in {remaining_minutes} minutes)")
-
-            choice = input("Enter 'm' to return the program or any other key to refresh: ")
+                    print(f"{index}. {task['description']} - {status} (Reminder in {remaining_hours} hours, {remaining_minutes} minutes)")
+                    show_notification=("Task Reminder", f"{task['description']} - {status} (Reminder in {remaining_hours} hours, {remaining_minutes} minutes)")
+            choice = input("Enter 'm' to return to the program or any other key to refresh: ")
             if choice == 'm':
                 break
+        
 
 def mark_task_as_completed():
     view_tasks_and_reminders()
