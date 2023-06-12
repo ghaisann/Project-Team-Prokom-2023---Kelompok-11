@@ -1,10 +1,8 @@
 Description,Reminder Text,Reminder Date,Reminder Time,Completed
-dfgs,sfgdh,2000-10-10,10:10,True
-tugas 1,jangan lupa mengerjakan tugas,2023-07-07,10:10,True
-test,halo,2023-06-06,09:00,False
-dfgb,dfgvb,2023-06-06,08:00,True
-tugas1,tugas,2023-06-06,10:10,True
-tugas,mmmm,2023-06-13,12:00,False
-memew,kit,2023-06-11,12:00,False
-prd,rusuh,2023-06-14,12:00,False
-afaf,afaf,2023-06-15,12:00,False
+Tugas fisika,Kerjakan segera!,2023-06-11,00:32,True
+Tugas AEB,Kerjakan segera ya!,2023-06-11,00:58,True
+Tugas Mekanika,Kerjakan!,2023-06-11,02:08,True
+Tugas Makalah PRD,Kerjakan segera!,2023-06-11,02:45,True
+Tugas Mekanika,Kerjakan,2023-06-11,02:47,True
+Tugas Fisika,Kerjakan segera!,2023-06-12,11:16,True
+Tugas Psikologi,Kerjakan besok,2023-06-12,12:05,False

@@ -2,6 +2,7 @@ import csv
 import datetime
 import time
 from plyer import notification
+from tabulate import tabulate 
 
 tasks = []
 
@@ -61,6 +62,26 @@ def add_task():
     })
     print("Task added successfully!")
 
+from operator import itemgetter
+def display_tasks_table():
+    headers = ['Task Number', 'Reminder Text', 'Reminder Date', 'Reminder Time', 'Completed']
+    rows = []
+
+    with open('tasks.csv', mode='r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            task = row['Description']
+            reminder_text = row['Reminder Text']
+            reminder_date = row['Reminder Date']
+            reminder_time = row['Reminder Time']
+            completed = row['Completed']
+
+            rows.append([task, reminder_text, reminder_date, reminder_time, completed])
+    sorted_rows = sorted(rows, key=itemgetter(2, 3))  # Mengurutkan berdasarkan tanggal dan waktu
+
+    table = tabulate(sorted_rows, headers=headers, tablefmt='grid')
+    print(table)
+
 def view_tasks_and_reminders():
     if not tasks:
         print("No tasks found.")
@@ -105,6 +126,40 @@ def mark_task_as_completed():
         except ValueError:
             print("Invalid input. Please enter a valid task number.")
 
+def calculate_task_completion_percentage():
+    total_tasks = len(tasks)
+    completed_tasks = sum(1 for task in tasks if task['completed'])
+    incomplete_tasks = total_tasks - completed_tasks
+
+    if total_tasks == 0:
+        complete_percentage = 0
+        incomplete_percentage = 0
+    else:
+        complete_percentage = (completed_tasks / total_tasks) * 100
+        incomplete_percentage = (incomplete_tasks / total_tasks) * 100
+
+    return complete_percentage, incomplete_percentage
+
+def display_task_completion_graph(complete_percentage, incomplete_percentage):
+    complete_bar = "#" * int(complete_percentage // 10)
+    incomplete_bar = "-" * int(incomplete_percentage // 10)
+
+    print("-----Task Completion Graph-----")
+    print(f"Complete: {complete_bar} {complete_percentage:.2f}%")
+    print(f"Incomplete: {incomplete_bar} {incomplete_percentage:.2f}%")
+
+import matplotlib.pyplot as plt
+
+def display_task_completion_graph(complete_percentage, incomplete_percentage):
+    labels = ['Complete', 'Incomplete']
+    sizes = [complete_percentage, incomplete_percentage]
+    colors = ['#1f77b4', '#ff7f0e']
+
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    plt.axis('equal')
+    plt.title('Task Completion')
+    plt.show()
+
 def main():
     load_tasks_from_csv()
 
@@ -115,7 +170,13 @@ def main():
             add_task()
             save_tasks_to_csv()
         elif choice == "2":
+            display_tasks_table()
             view_tasks_and_reminders()
+            complete_percentage, incomplete_percentage = calculate_task_completion_percentage()
+            print("-----Task Completion-----")
+            print(f"Complete: {complete_percentage:.2f}%")
+            print(f"Incomplete: {incomplete_percentage:.2f}%")
+            display_task_completion_graph(complete_percentage, incomplete_percentage)
         elif choice == "3":
             mark_task_as_completed()
             save_tasks_to_csv()
@@ -129,5 +190,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    
