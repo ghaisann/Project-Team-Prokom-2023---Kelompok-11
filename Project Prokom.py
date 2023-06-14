@@ -2,7 +2,9 @@ import csv
 import datetime
 import time
 from plyer import notification
-from tabulate import tabulate 
+from tabulate import tabulate
+import matplotlib.pyplot as plt
+from operator import itemgetter
 
 tasks = []
 
@@ -53,6 +55,7 @@ def add_task():
             break
         except ValueError:
             print("Invalid time format. Please enter the time in HH:MM format.")
+    reminder_datetime = datetime.datetime.strptime(date_str + " " + time_str, "%Y-%m-%d %H:%M")        
     tasks.append({
         "description": task,
         "reminder_text": reminder_text,
@@ -62,58 +65,40 @@ def add_task():
     })
     print("Task added successfully!")
 
-from operator import itemgetter
+    schedule_notification(tasks[-1], reminder_datetime)
+
+def schedule_notification(task, reminder_datetime):
+    current_datetime = datetime.datetime.now()
+    time_difference = reminder_datetime - current_datetime
+    notification_time = time_difference.total_seconds() - 3600
+
+    if notification_time > 0:
+        time.sleep(notification_time)
+        notification.notify(
+            title = "Task Reminder",
+            message = f"{task['description']} - {task['reminder_text']}",
+            timeout=30
+        )
+
 def display_tasks_table():
     headers = ['Task Number', 'Reminder Text', 'Reminder Date', 'Reminder Time', 'Completed']
     rows = []
+    sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))  # Mengurutkan berdasarkan tanggal dan waktu
 
-    with open('tasks.csv', mode='r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            task = row['Description']
-            reminder_text = row['Reminder Text']
-            reminder_date = row['Reminder Date']
-            reminder_time = row['Reminder Time']
-            completed = row['Completed']
+    for index, task in enumerate(sorted_tasks, start=1):
+        status = "Completed" if task["completed"] else "Incomplete"
+        rows.append([index, task['description'], task['reminder_text'], task['reminder_date'], task['reminder_time'], status])
 
-            rows.append([task, reminder_text, reminder_date, reminder_time, completed])
-    sorted_rows = sorted(rows, key=itemgetter(2, 3))  # Mengurutkan berdasarkan tanggal dan waktu
-
-    table = tabulate(sorted_rows, headers=headers, tablefmt='grid')
+    table = tabulate(rows, headers=headers, tablefmt='grid')
     print(table)
 
 def view_tasks_and_reminders():
-    if not tasks:
-        print("No tasks found.")
-    else:
-        while True:
-            current_datetime = datetime.datetime.now()
-            print("Tasks and Reminders:")
-            for index, task in enumerate(tasks, start=1):
-                status = "Completed" if task["completed"] else "Incomplete"
-                reminder_datetime = datetime.datetime.strptime(task['reminder_date'] + " " + task['reminder_time'], "%Y-%m-%d %H:%M")
-                time_difference = reminder_datetime - current_datetime
-                remaining_time = time_difference.total_seconds()
-                if remaining_time <= 0:
-                    print(f"{index}. {task['description']} - {status} (Reminder time passed)")
-                else:
-                    remaining_hours = int(remaining_time / 3600)
-                    remaining_minutes = int(remaining_time / 60)
-                    print(f"{index}. {task['description']} - {status} (Reminder in {remaining_hours} hours, {remaining_minutes} minutes)")
-                    notify_task_reminder(task['description'], status, remaining_hours, remaining_minutes)
-            choice = input("Enter 'm' to return to the program or any other key to refresh: ")
-            if choice == 'm':
-                break
-
-def notify_task_reminder(description, status, hours, minutes):
-    notification.notify(
-        title="Task Reminder",
-        message=f"{description} - {status} (Reminder in {hours} hours, {minutes} minutes)",
-        timeout=30  # Durasi notifikasi dalam detik
-    )
+    display_tasks_table()
+    input("Press Enter to continue...")
+    display_menu()
 
 def mark_task_as_completed():
-    view_tasks_and_reminders()
+    display_tasks_table()
     while True:
         try:
             task_number = int(input("Enter the task number to mark as completed: "))
@@ -141,16 +126,6 @@ def calculate_task_completion_percentage():
     return complete_percentage, incomplete_percentage
 
 def display_task_completion_graph(complete_percentage, incomplete_percentage):
-    complete_bar = "#" * int(complete_percentage // 10)
-    incomplete_bar = "-" * int(incomplete_percentage // 10)
-
-    print("-----Task Completion Graph-----")
-    print(f"Complete: {complete_bar} {complete_percentage:.2f}%")
-    print(f"Incomplete: {incomplete_bar} {incomplete_percentage:.2f}%")
-
-import matplotlib.pyplot as plt
-
-def display_task_completion_graph(complete_percentage, incomplete_percentage):
     labels = ['Complete', 'Incomplete']
     sizes = [complete_percentage, incomplete_percentage]
     colors = ['#1f77b4', '#ff7f0e']
@@ -170,13 +145,7 @@ def main():
             add_task()
             save_tasks_to_csv()
         elif choice == "2":
-            display_tasks_table()
             view_tasks_and_reminders()
-            complete_percentage, incomplete_percentage = calculate_task_completion_percentage()
-            print("-----Task Completion-----")
-            print(f"Complete: {complete_percentage:.2f}%")
-            print(f"Incomplete: {incomplete_percentage:.2f}%")
-            display_task_completion_graph(complete_percentage, incomplete_percentage)
         elif choice == "3":
             mark_task_as_completed()
             save_tasks_to_csv()
