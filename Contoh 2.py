@@ -1,6 +1,7 @@
 import csv
 import datetime
 import time
+import threading
 from plyer import notification
 from tabulate import tabulate
 import matplotlib.pyplot as plt
@@ -65,25 +66,34 @@ def add_task():
     })
     print("Task added successfully!")
 
-    schedule_notification(tasks[-1], reminder_datetime)
+    threading.Thread(target=schedule_notification, args=(tasks[-1], reminder_datetime)).start()
 
 def schedule_notification(task, reminder_datetime):
     current_datetime = datetime.datetime.now()
-    time_difference = reminder_datetime - current_datetime
-    notification_time = time_difference.total_seconds() - 3600
+    for index, task in enumerate(tasks, start=1):
+                status = "Completed" if task["completed"] else "Incomplete"
+                reminder_datetime = datetime.datetime.strptime(task['reminder_date'] + " " + task['reminder_time'], "%Y-%m-%d %H:%M")
+                time_difference = reminder_datetime - current_datetime
+                remaining_time = time_difference.total_seconds()
+                if remaining_time <= 0:
+                    print(f"{index}. {task['description']} - {status} (Reminder time passed)")
+                else:
+                    remaining_hours = int(remaining_time / 3600)
+                    remaining_minutes = int(remaining_time / 60)
+                    print(f"{index}. {task['description']} - {status} (Reminder in {remaining_hours} hours, {remaining_minutes} minutes)")
+                    notify_task_reminder(task['description'], status, remaining_hours, remaining_minutes)
 
-    if notification_time > 0 and not task['completed']:
-        time.sleep(notification_time)
-        notification.notify(
-            title="Task Reminder",
-            message=f"{task['description']} - {task['reminder_text']}",
-            timeout=30
-        )
-
+def notify_task_reminder(description, status, hours, minutes):
+    notification.notify(
+        title="Task Reminder",
+        message=f"{description} - {status} (Reminder in {hours} hours, {minutes} minutes)",
+        timeout=30 
+    )
+ 
 def display_tasks_table():
     headers = ['Task Number', 'Reminder Text', 'Reminder Date', 'Reminder Time', 'Completed']
     rows = []
-    sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))  # Mengurutkan berdasarkan tanggal dan waktu
+    sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))  # Mengurutkan berdasarkan tanggal dan wakta
 
     for index, task in enumerate(sorted_tasks, start=1):
         status = "Completed" if task["completed"] else "Incomplete"

@@ -1,6 +1,7 @@
 import csv
 import datetime
 import time
+import threading
 from plyer import notification
 from tabulate import tabulate
 import matplotlib.pyplot as plt
@@ -65,7 +66,8 @@ def add_task():
     })
     print("Task added successfully!")
 
-    schedule_notification(tasks[-1], reminder_datetime)
+    # Menggunakan threading untuk menampilkan notifikasi
+    threading.Thread(target=schedule_notification, args=(tasks[-1], reminder_datetime)).start()
 
 def schedule_notification(task, reminder_datetime):
     current_datetime = datetime.datetime.now()
