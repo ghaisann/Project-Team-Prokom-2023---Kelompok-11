@@ -145,7 +145,13 @@ def main():
             add_task()
             save_tasks_to_csv()
         elif choice == "2":
+            display_tasks_table()
             view_tasks_and_reminders()
+            complete_percentage, incomplete_percentage = calculate_task_completion_percentage()
+            print("-----Task Completion-----")
+            print(f"Complete: {complete_percentage:.2f}%")
+            print(f"Incomplete: {incomplete_percentage:.2f}%")
+            display_task_completion_graph(complete_percentage, incomplete_percentage)
         elif choice == "3":
             mark_task_as_completed()
             save_tasks_to_csv()
