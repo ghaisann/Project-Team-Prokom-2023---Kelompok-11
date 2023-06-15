@@ -101,14 +101,17 @@ def mark_task_as_completed():
     while True:
         try:
             task_number = int(input("Enter the task number to mark as completed: "))
-            if 1 <= task_number <= len(tasks):
-                tasks[task_number - 1]["completed"] = True
+            sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))  # Mengurutkan berdasarkan tanggal dan waktu
+            if 1 <= task_number <= len(sorted_tasks):
+                sorted_tasks[task_number - 1]["completed"] = True
+                tasks[tasks.index(sorted_tasks[task_number - 1])]["completed"] = True
                 print("Task marked as completed!")
                 break
             else:
                 print("Invalid task number.")
         except ValueError:
             print("Invalid input. Please enter a valid task number.")
+
 
 def calculate_task_completion_percentage():
     total_tasks = len(tasks)
@@ -145,19 +148,21 @@ def check_overdue_tasks():
                 timeout=30
             )
 
-def to_do_task() :
+def to_do_task():
     current_datetime = datetime.datetime.now()
     for index, task in enumerate(tasks, start=1):
-        status = "Completed" if task["completed"] else "Incomplete"
-        reminder_datetime = datetime.datetime.strptime(task['reminder_date'] + " " + task['reminder_time'], "%Y-%m-%d %H:%M")
-        time_difference = reminder_datetime - current_datetime
-        remaining_time = time_difference.total_seconds()
-        if remaining_time <= 0:
-            pass
-        else:
-            remaining_hours = int(remaining_time / 3600)
-            remaining_minutes = int(remaining_time / 60 - remaining_hours*60)
-            notify_task_reminder(task['description'], status, remaining_hours, remaining_minutes)
+        if not task['completed']:
+            status = "Incomplete"
+            reminder_datetime = datetime.datetime.strptime(task['reminder_date'] + " " + task['reminder_time'], "%Y-%m-%d %H:%M")
+            time_difference = reminder_datetime - current_datetime
+            remaining_time = time_difference.total_seconds()
+            if remaining_time <= 0:
+                pass
+            else:
+                remaining_hours = int(remaining_time / 3600)
+                remaining_minutes = int(remaining_time / 60 - remaining_hours * 60)
+                notify_task_reminder(task['description'], status, remaining_hours, remaining_minutes)
+
 
 def notify_task_reminder(description, status, hours, minutes):
     notification.notify(

@@ -1,8 +1,12 @@
 Description,Reminder Text,Reminder Date,Reminder Time,Completed
 tugas,tugas program,2023-06-14,23:59,True
-coba lagi,coba terus,2023-06-14,23:00,False
+coba lagi,coba terus,2023-06-14,23:00,True
 tugas akhir,mekanika teknik,2023-06-14,22:50,True
-coba,coba lagi,2023-06-14,21:00,False
-COBA,COBA LAGI,2023-06-24,23:00,False
-coba,yuk bisa yuk,2023-06-15,23:30,False
-posi,prokom,2023-06-15,20:00,False
+coba,coba lagi,2023-06-14,21:00,True
+COBA,COBA LAGI,2023-06-24,23:00,True
+coba,yuk bisa yuk,2023-06-15,23:30,True
+posi,prokom,2023-06-15,20:00,True
+AEB,UTS,2023-06-25,12:00,False
+PRD,UTS,2023-06-16,12:00,True
+vuvu,kerja,2023-06-22,12:00,False
+Mekatek,UTS,2023-06-19,12:00,False
