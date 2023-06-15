@@ -66,19 +66,56 @@ def add_task():
     })
     print("Task added successfully!")
     threading.Thread(target=schedule_notification, args=(tasks[-1], reminder_datetime)).start()
+    threading.Thread(target=schedule_notification2, args=(tasks[-1], reminder_datetime)).start()
+    
 
 def schedule_notification(task, reminder_datetime):
     current_datetime = datetime.datetime.now()
     time_difference = reminder_datetime - current_datetime
-    notification_time = time_difference.total_seconds() - 3600
+    remaining_time = time_difference.total_seconds()
+    status = "Incomplete"
 
-    if notification_time > 0:
-        time.sleep(notification_time)
-        notification.notify(
-            title = "Task Reminder",
-            message = f"{task['description']} - {task['reminder_text']}",
-            timeout=30
-        )
+    if remaining_time <= 0:
+        return  # Jika waktu sisa negatif atau nol, tidak perlu menampilkan notifikasi
+
+    notification_time = remaining_time - 3600 # Mengurangi 1 jam dari waktu sisa
+
+    if notification_time <= 0:
+        return  # Jika waktu notifikasi sudah lewat, tidak perlu menampilkan notifikasi
+
+    remaining_hours = int((remaining_time/3600))
+    remaining_minutes = int((remaining_time / 60 - remaining_hours * 60))
+
+    time.sleep(notification_time)
+    notification.notify(
+        title="Task Reminder",
+        message=f"{task['description']} - {status} (Reminder in {remaining_hours} hours, {remaining_minutes} minutes)",
+        timeout=30  # Durasi notifikasi dalam detik
+    )
+
+def schedule_notification2(task, reminder_datetime):
+    current_datetime = datetime.datetime.now()
+    time_difference = reminder_datetime - current_datetime
+    remaining_time = time_difference.total_seconds()
+    status = "Incomplete"
+
+    if remaining_time <= 0:
+        return  # Jika waktu sisa negatif atau nol, tidak perlu menampilkan notifikasi
+
+    notification_time2 = remaining_time - 86400 # Mengurangi 1 jam dari waktu sisa
+
+    if notification_time2 <= 0:
+        return  # Jika waktu notifikasi sudah lewat, tidak perlu menampilkan notifikasi
+
+    remaining_hours2 = int((remaining_time/3600))
+    remaining_minutes2 = int((remaining_time / 60 - remaining_hours2 * 60))
+
+    time.sleep(notification_time2)
+    notification.notify(
+        title="Task Reminder",
+        message=f"{task['description']} - {status} (Reminder in {remaining_hours2} hours, {remaining_minutes2} minutes)",
+        timeout=30  # Durasi notifikasi dalam detik
+    )
 
 def display_tasks_table():
     headers = ['Task Number', 'Reminder Text', 'Reminder Date', 'Reminder Time', 'Completed']
@@ -200,6 +237,6 @@ def main():
             print("Invalid choice. Please try again.")
 
         print()
-
+        
 if __name__ == "__main__":
     main()
