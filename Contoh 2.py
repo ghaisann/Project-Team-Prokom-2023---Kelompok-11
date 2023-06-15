@@ -71,6 +71,7 @@ def schedule_notification(task, reminder_datetime):
     current_datetime = datetime.datetime.now()
     time_difference = reminder_datetime - current_datetime
     notification_time = time_difference.total_seconds() - 3600
+    notification_time = time_difference.total_seconds() - 86400
 
     if notification_time > 0:
         time.sleep(notification_time)
