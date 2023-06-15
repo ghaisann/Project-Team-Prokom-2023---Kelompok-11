@@ -188,6 +188,8 @@ def main():
             print(f"Complete: {complete_percentage:.2f}%")
             print(f"Incomplete: {incomplete_percentage:.2f}%")
             display_task_completion_graph(complete_percentage, incomplete_percentage)
+            check_overdue_tasks()
+            to_do_task()
         elif choice == "3":
             mark_task_as_completed()
             save_tasks_to_csv()
@@ -196,9 +198,6 @@ def main():
             break
         else:
             print("Invalid choice. Please try again.")
-
-        check_overdue_tasks()
-        to_do_task()
 
         print()
 
