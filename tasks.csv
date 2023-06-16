@@ -1,6 +1,5 @@
-Description,Reminder Text,Reminder Date,Reminder Time,Completed
-Tugas Prokom,Kerjakan!,2023-06-16,20:00,True
-Tugas Kalkulus,Kerjakan!,2023-06-20,16:00,True
-Tugas Fisika,Kerjakan!,2023-06-20,19:00,True
-Tugas PRD,Kerjakan!,2023-06-16,20:00,False
-tugas jurnal,kerjakan,2023-06-17,00:01,False
+Description,Reminder Date,Reminder Time,Completed
+Tugas Prokom,2023-06-16,20:00,True
+Tugas Kalkulus,2023-06-20,16:00,True
+Tugas Fisika,2023-06-20,19:00,True
+Tugas PRD,2023-06-16,20:00,True
