@@ -118,7 +118,6 @@ def display_tasks_table():
 
 def view_tasks_and_reminders():
     input("Press Enter to continue...")
-    display_menu()
 
 def mark_task_as_completed():
     display_tasks_table()
