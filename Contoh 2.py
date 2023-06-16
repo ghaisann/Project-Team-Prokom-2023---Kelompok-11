@@ -105,9 +105,9 @@ def schedule_notification2(task, reminder_datetime):
             )
 
 def display_tasks_table():
-    headers = ['Task Number', 'Reminder Date', 'Reminder Time', 'Completed']
+    headers = ['Description Task', 'Reminder Date', 'Reminder Time', 'Completed']
     rows = []
-    sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))  # Mengurutkan berdasarkan tanggal dan waktu
+    sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))
 
     for index, task in enumerate(sorted_tasks, start=1):
         status = "Completed" if task["completed"] else "Incomplete"
