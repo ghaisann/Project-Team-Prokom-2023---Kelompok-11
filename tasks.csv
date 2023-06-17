@@ -1,4 +1,7 @@
 Description,Reminder Date,Reminder Time,Completed
 Tubes Prokom,2023-06-18,01:03,False
 Tugas Kalkulus,2023-06-17,02:05,True
-Tugas PRD,2023-06-16,00:00,False
+Tugas PRD,2023-06-16,00:00,True
+Tugas Prokom,2023-06-18,12:16,False
+Tugas Laporan Prokom,2023-06-18,12:21,False
+Tugas Mekanika Teknik,2023-06-17,12:23,False

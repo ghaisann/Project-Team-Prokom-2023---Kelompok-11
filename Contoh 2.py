@@ -105,7 +105,7 @@ def schedule_notification2(task, reminder_datetime):
             )
 
 def display_tasks_table():
-    headers = ['Task Description', 'Reminder Date', 'Reminder Time', 'Completed']
+    headers = ['Task Description', 'Due Date', 'Time', 'Status']
     rows = []
     sorted_tasks = sorted(tasks, key=lambda x: (x['reminder_date'], x['reminder_time']))
 
