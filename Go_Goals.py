@@ -61,7 +61,7 @@ def add_task():
         "completed": False
     })
     print("Task added successfully!")
-    threading.Thread(target=g_notification, args=(tasks[-1], reminder_datetime)).start()
+    threading.Thread(target=schedule_notification, args=(tasks[-1], reminder_datetime)).start()
     threading.Thread(target=schedule_notification2, args=(tasks[-1], reminder_datetime)).start()
     
 def schedule_notification(task, reminder_datetime):
