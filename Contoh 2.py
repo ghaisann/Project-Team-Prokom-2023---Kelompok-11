@@ -117,6 +117,7 @@ def display_tasks_table():
     print(table)
 
 def view_tasks_and_reminders():
+    display_tasks_table()
     input("Press Enter to continue...")
 
 def mark_task_as_completed():
@@ -205,7 +206,6 @@ def main():
             save_tasks_to_csv()
         elif choice == "2":
             load_tasks_from_csv
-            display_tasks_table()
             view_tasks_and_reminders()
             complete_percentage, incomplete_percentage = calculate_task_completion_percentage()
             print("-----Task Completion-----")
